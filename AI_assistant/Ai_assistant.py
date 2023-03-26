@@ -6,10 +6,10 @@ import webbrowser as web
 from selenium import webdriver
 import speech_recognition as sr
 import datetime
-from web_Auto import *
-from news import *
-from questions import *
-from youtube import *
+from web_Auto import wiki
+from news import news
+from questions import question
+from youtube import video
 
 engine=p.init('sapi5')
 voices=engine.getProperty('voices')
@@ -26,7 +26,7 @@ def wish():
         speck('Good morning')
     elif hour<=12 and hour>18:
         speck("good Afternoon")
-    elif hour>=18 and hour<0:
+    elif hour>=18:
         speck("Good Evening")
 
     speck("Hi Im AI sir, How mey I help You")
@@ -50,7 +50,7 @@ if __name__== "__main__":
             speck("Say That Again....")
 
         # information for wikipedia
-        if "information" in query:
+        if "information" in query.lower():
             speck("Information For What")
             r1 = sr.Recognizer()
             with sr.Microphone() as source1:
@@ -62,8 +62,7 @@ if __name__== "__main__":
             try:
                 print("recognizing...")
                 query = r1.recognize_google(audio1, language="en-in")
-                bot = info()
-                bot.wiki(query)
+                wiki(query)
                 print(f"User Said:{query}")
             except Exception as e:
                 print(e)
@@ -72,29 +71,30 @@ if __name__== "__main__":
             exit()
 
         # playing music
-        elif "play music" in query:
+        elif "play music" in query.lower():
             music="C:\\music"
             songs=os.listdir(music)
             i=random.randint(0,68)
             print(i)
             os.startfile(os.path.join(music,songs[i]))
 
-        elif "open youtube" in query:
+        elif "open youtube" in query.lower():
             web.open_new("https://www.youtube.com/")
 
-        elif "time" in query:
+        elif "time" in query.lower():
             time=datetime.datetime.now().strftime("%H:%M")
             speck(f"The time is {time}")
-        elif "open code" in query:
+
+        elif "open code" in query.lower():
             code="C:\\Users\\hp\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe"
             os.startfile(code)
 
-        elif "open chrome" in query:
+        elif "open chrome" in query.lower():
             chrome="C:\Program Files (x86)\Google\Chrome\Application\chrome.exe"
             os.startfile(chrome)
 
         # News
-        elif "news" in query:
+        elif "news" in query.lower():
             speck("Tell Me which category you want to get News")
             r2 = sr.Recognizer()
             with sr.Microphone() as source2:
@@ -106,8 +106,7 @@ if __name__== "__main__":
             try:
                 print("recognizing...")
                 query = r2.recognize_google(audio2, language="en-in")
-                bot = newspage()
-                bot.news(query)
+                news(query)
                 print(f"User Said:{query}")
             except Exception as e:
                 print(e)
@@ -116,7 +115,7 @@ if __name__== "__main__":
             exit()
 
         # Question and Answers
-        elif "I have questions" in query:
+        elif "I have questions" in query.lower():
             speck("Tell Me what is your question")
             r3 = sr.Recognizer()
             with sr.Microphone() as source3:
@@ -128,8 +127,7 @@ if __name__== "__main__":
             try:
                 print("recognizing...")
                 query = r3.recognize_google(audio3, language="en-in")
-                bot = questions()
-                bot.question(query)
+                question(query)
                 print(f"User Said:{query}")
             except Exception as e:
                 print(e)
@@ -138,7 +136,7 @@ if __name__== "__main__":
             exit()
 
         # Play Youtube Videos
-        elif "play video" in query:
+        elif "play video" in query.lower():
             speck("Tell Me Video Name")
             r2 = sr.Recognizer()
             with sr.Microphone() as source2:
@@ -150,8 +148,7 @@ if __name__== "__main__":
             try:
                 # print("recognizing...")
                 query = r.recognize_google(audio2, language="en-in")
-                bot = youtube()
-                bot.video(query)
+                video(query)
                 print(f"User Said:{query}")
             except Exception as e:
                 print(e)
@@ -159,7 +156,7 @@ if __name__== "__main__":
                 # speck("Say That Again....")
             exit()
 
-        elif "close" in query:
+        elif "close" in query.lower():
             sys.exit()
 
 

@@ -5,25 +5,23 @@ from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.common.by import By
 import time
 import pyttsx3 as p
-class youtube():
-    def __init__(self):
-        self.driver = webdriver.Edge(executable_path="C:\selenium\msedgedriver.exe")
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
-    def video(self,query):
-        self.query = query
-        self.driver.get(url="https://www.youtube.com/")
-        # search=WebDriverWait(self.driver, 10).until(ec.element_to_be_clickable((By.XPATH, '//*[@id="search"]'))).click()
-        search = self.driver.find_element_by_xpath('//*[@id="search"]')
-        search.click()
-        search.send_keys(query+Keys.ENTER)
+def video(query):
+    query = query
+    options = webdriver.ChromeOptions()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()),options=options)
+    # driver = webdriver.Chrome(executable_path="C:/selenium/chromedriver.exe")
+    # driver = webdriver.Firefox(executable_path="C:/selenium/geckodriver.exe")
+    # driver = webdriver.Edge(executable_path="C:/selenium/msedgedriver.exe")
+    driver.get(url="https://www.youtube.com/")
+    driver.implicitly_wait(10)
+    search = driver.find_element(By.XPATH,'//input[@id="search"]')
+    
+    search.click()
+    search.send_keys(query+Keys.ENTER)
 
-        WebDriverWait(self.driver,70).until(ec.element_to_be_clickable((By.XPATH,'//*[@id="video-title"]/yt-formatted-string'))).click()
-        WebDriverWait(self.driver, 70).until(ec.element_to_be_clickable((By.XPATH, '//*[@id="movie_player"]/div[27]/div[2]/div[2]/button[8]'))).click()
-        # enter = self.driver.find_element_by_xpath('//*[@id="movie_player"]/div[27]/div[2]/div[2]/button[8]')
-        # enter.click()
-
-        # video = self.driver.find_element_by_id("img")
-        # video.click()
-
-# bot = youtube()
-# bot.video("hirkani full movie")
+    WebDriverWait(driver,70).until(ec.element_to_be_clickable((By.XPATH,'//*[@id="video-title"]/yt-formatted-string'))).click()
+    WebDriverWait(driver, 70).until(ec.element_to_be_clickable((By.XPATH, '//*[@id="movie_player"]/div[27]/div[2]/div[2]/button[8]'))).click()
